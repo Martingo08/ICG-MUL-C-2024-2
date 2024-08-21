@@ -3,9 +3,12 @@ var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 var posicionX = document.getElementById('posicion-x');
 var posicionY = document.getElementById('posicion-y');
+var radio = document.getElementById('radio');
+var angulo = document.getElementById('angulo');
 var ancho = document.getElementById('ancho');
 var alto = document.getElementById('alto');
 var numLados = document.getElementById('num-lados');
+var sistemaCoordenadas = document.getElementById('sistema-coordenadas');
 var actualizar = document.getElementById('actualizar');
 
 // Definimos la figura geométrica plana
@@ -34,15 +37,23 @@ function dibujarFigura() {
     ctx.fillRect(figura.x, figura.y, figura.ancho, figura.alto);
   } else {
     ctx.beginPath();
-    ctx.arc(figura.x + figura.ancho / 2, figura.y + figura.alto / 2, figura.ancho / 2, 0, 2 * Math.PI);
+    var angulo = 2 * Math.PI / figura.numLados;
+    for (var i = 0; i < figura.numLados; i++) {
+      ctx.lineTo(figura.x + figura.ancho / 2 + Math.cos(angulo * i) * figura.ancho / 2, figura.y + figura.alto / 2 + Math.sin(angulo * i) * figura.alto / 2);
+    }
     ctx.fill();
   }
 }
 
 // Función para actualizar la posición y tamaño de la figura
 function actualizarFigura() {
-  figura.x = parseInt(posicionX.value);
-  figura.y = parseInt(posicionY.value);
+  if (sistemaCoordenadas.value === 'cartesianas') {
+    figura.x = parseInt(posicionX.value);
+    figura.y = parseInt(posicionY.value);
+  } else if (sistemaCoordenadas.value === 'polares') {
+    figura.x = parseInt(radio.value) * Math.cos(parseInt(angulo.value) * Math.PI / 180);
+    figura.y = parseInt(radio.value) * Math.sin(parseInt(angulo.value) * Math.PI / 180);
+  }
   figura.ancho = parseInt(ancho.value);
   figura.alto = parseInt(alto.value);
   figura.numLados = parseInt(numLados.value);
