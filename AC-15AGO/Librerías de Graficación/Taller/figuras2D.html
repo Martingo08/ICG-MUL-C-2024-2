@@ -2,17 +2,37 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Figura geométrica plana</title>
+  <title>Visualizador de figura geométrica plana</title>
   <style>
     #canvas {
       border: 1px solid black;
     }
+    #controles {
+      margin-top: 20px;
+    }
+    #controles label {
+      display: block;
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 <body>
+  <h1>Visualizador de figura geométrica plana</h1>
   <canvas id="canvas" width="400" height="200"></canvas>
-  <input id="ancho" type="number" value="100">
-  <input id="alto" type="number" value="50">
-  <script src="script.js"></script>
+  <div id="controles">
+    <label>Posición X:</label>
+    <input id="posicion-x" type="number" value="50">
+    <label>Posición Y:</label>
+    <input id="posicion-y" type="number" value="50">
+    <label>Ancho:</label>
+    <input id="ancho" type="number" value="100">
+    <label>Alto:</label>
+    <input id="alto" type="number" value="50">
+    <label>Número de lados:</label>
+    <input id="num-lados" type="number" value="4">
+    <button id="actualizar">Actualizar</button>
+  </div>
+
+  <script src="figuras2D.js"></script>
 </body>
 </html>
