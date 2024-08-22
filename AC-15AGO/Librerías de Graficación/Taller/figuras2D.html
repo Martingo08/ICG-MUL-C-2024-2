@@ -14,7 +14,7 @@
   <canvas id="canvas" width="400" height="400"></canvas>
   <form>
     <label for="sistema-coordenadas">Sistema de coordenadas:</label>
-    <select id="sistema-coordenadas">
+    <select id="sistema-coordenadas" onchange="habilitarCampos(this.value)">
       <option value="cartesianas">Cartesianas</option>
       <option value="polares">Polares</option>
     </select>
@@ -40,9 +40,25 @@
     <label for="num-lados">Número de lados:</label>
     <input type="number" id="num-lados" value="4">
     <br><br>
-    <button id="actualizar">Actualizar</button>
+    <button type="button" id="actualizar" onclick="actualizarFigura()">Actualizar</button>
   </form>
+  
+  <script>
+    function habilitarCampos(valor) {
+      if (valor === 'cartesianas') {
+        document.getElementById('posicion-x').disabled = false;
+        document.getElementById('posicion-y').disabled = false;
+        document.getElementById('radio').disabled = true;
+        document.getElementById('angulo').disabled = true;
+      } else if (valor === 'polares') {
+        document.getElementById('posicion-x').disabled = true;
+        document.getElementById('posicion-y').disabled = true;
+        document.getElementById('radio').disabled = false;
+        document.getElementById('angulo').disabled = false;
+      }
+    }
+  </script>
 
-  <script src="script.js"></script>
+  <script src="figuras2D.js"></script>
 </body>
 </html>

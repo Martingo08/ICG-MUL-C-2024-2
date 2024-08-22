@@ -47,17 +47,30 @@ function dibujarFigura() {
 
 // Función para actualizar la posición y tamaño de la figura
 function actualizarFigura() {
-  if (sistemaCoordenadas.value === 'cartesianas') {
-    figura.x = parseInt(posicionX.value);
-    figura.y = parseInt(posicionY.value);
-  } else if (sistemaCoordenadas.value === 'polares') {
-    figura.x = parseInt(radio.value) * Math.cos(parseInt(angulo.value) * Math.PI / 180);
-    figura.y = parseInt(radio.value) * Math.sin(parseInt(angulo.value) * Math.PI / 180);
-  }
-  figura.ancho = parseInt(ancho.value);
-  figura.alto = parseInt(alto.value);
-  figura.numLados = parseInt(numLados.value);
-  dibujarFigura();
+    if (sistemaCoordenadas.value === 'cartesianas') {
+      figura.x = parseInt(posicionX.value);
+      figura.y = parseInt(posicionY.value);
+      radio.value = ''; // Limpiar campo de radio
+      angulo.value = ''; // Limpiar campo de ángulo
+      posicionX.disabled = false;
+      posicionY.disabled = false;
+      radio.disabled = true;
+      angulo.disabled = true;
+    } else if (sistemaCoordenadas.value === 'polares') {
+      figura.x = parseInt(radio.value) * Math.cos(parseInt(angulo.value) * Math.PI / 180);
+      figura.y = parseInt(radio.value) * Math.sin(parseInt(angulo.value) * Math.PI / 180);
+      posicionX.value = ''; // Limpiar campo de posición X
+      posicionY.value = ''; // Limpiar campo de posición Y
+      radio.disabled = false;
+      angulo.disabled = false;
+      posicionX.disabled = true;
+      posicionY.disabled = true;
+    }
+    figura.ancho = parseInt(ancho.value);
+    figura.alto = parseInt(alto.value);
+    figura.numLados = parseInt(numLados.value);
+    dibujarFigura();
+    return false;
 }
 
 // Evento para actualizar la figura al hacer clic en el botón
