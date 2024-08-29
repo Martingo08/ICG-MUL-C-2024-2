@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Dibujar Polígono</title>
+  <style>
+    #canvas {
+      border: 1px solid rgb(0, 0, 0);
+    }
+  </style>
+</head>
+<body>
+  <h1>Dibujar Polígono</h1>
+  <form>
+    <label for="numLados">Número de lados:</label>
+    <input type="number" id="numLados" value="5"><br><br>
+    <label for="tamanoLado">Tamaño del lado:</label>
+    <input type="number" id="tamanoLado" value="100"><br><br>
+    <label for="x">Coordenada X:</label>
+    <input type="number" id="x" value="0"><br><br>
+    <label for="y">Coordenada Y:</label>
+    <input type="number" id="y" value="0"><br><br>
+    <button id="dibujar">Dibujar</button>
+  </form>
+  <canvas id="canvas" width="500" height="500"></canvas>
+
+  <script src="Parcial_01.js"></script>
+</body>
+</html>
