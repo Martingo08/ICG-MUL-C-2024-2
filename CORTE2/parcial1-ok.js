@@ -1,11 +1,15 @@
-// Función para dibujar un polígono
-function dibujarPoligono() {
-  // Obtener valores
-  let numLados = parseInt(document.getElementById("numLados").value);
-  let tamanoLado = parseFloat(document.getElementById("tamanoLado").value);
-  let x = parseInt(document.getElementById("x").value);
-  let y = parseInt(document.getElementById("y").value);
+// Función para calcular el apotema
+function calcularApotema(tamanoLado, numLados) {
+  return tamanoLado / (2 * Math.tan(Math.PI / numLados));
+}
 
+// Función para calcular el radio del polígono
+function calcularRadio(apotema, numLados) {
+  return apotema / Math.sin(Math.PI / numLados);
+}
+
+// Función para dibujar un polígono
+function dibujarPoligono(x, y, numLados, tamanoLado, sistemaCoordenadas) {
   // Crear canvas
   let canvas = document.getElementById("canvas");
   let ctx = canvas.getContext("2d");
@@ -14,30 +18,42 @@ function dibujarPoligono() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
 
-  // Calcular el apotema a partir del tamaño de los lados y del número de lados
-  let apotema = tamanoLado / (2 * Math.tan(Math.PI / numLados));
-
-  // Calcular el radio del polígono
-  let radio = apotema / Math.sin(Math.PI / numLados);
+  // Calcular el apotema y el radio
+  let apotema = calcularApotema(tamanoLado, numLados);
+  let radio = calcularRadio(apotema, numLados);
 
   // Origen en el centro del canvas, pero desplazado por la coordenada x e y
   ctx.translate(canvas.width / 2 + x, canvas.height / 2 + y);
-  if (numLados % 2 !== 0) {
-    ctx.rotate(-Math.PI / 2); // Rotar el canvas 90 grados hacia la izquierda
-  }
 
   // Dibujar polígono
   ctx.beginPath();
   for (let i = 0; i <= numLados; i++) {
     let angulo = (i / numLados) * 2 * Math.PI;
-    ctx.lineTo(radio * Math.cos(angulo), radio * Math.sin(angulo));
+    if (sistemaCoordenadas === "polares") {
+      ctx.lineTo(radio * Math.cos(angulo), radio * Math.sin(angulo));
+    } else if (sistemaCoordenadas === "cartesianas") {
+      ctx.lineTo(x + radio * Math.cos(angulo), y + radio * Math.sin(angulo));
+    }
   }
   ctx.closePath();
   ctx.stroke();
 }
 
+// Función para manejar el evento del botón
+function manejarEventoDibujar() {
+  // Obtener valores
+  let numLados = parseInt(document.getElementById("numLados").value);
+  let tamanoLado = parseFloat(document.getElementById("tamanoLado").value);
+  let x = parseInt(document.getElementById("x").value);
+  let y = parseInt(document.getElementById("y").value);
+  let sistemaCoordenadas = document.getElementById("sistemaCoordenadas").value;
+
+  // Dibujar polígono
+  dibujarPoligono(x, y, numLados, tamanoLado, sistemaCoordenadas);
+}
+
 // Agregar evento al botón
 document.getElementById("dibujar").addEventListener("click", function(event) {
   event.preventDefault();
-  dibujarPoligono();
+  manejarEventoDibujar();
 });
