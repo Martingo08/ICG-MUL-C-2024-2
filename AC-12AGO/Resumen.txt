@@ -1,0 +1,9 @@
+La conferencia trató la relación entre la inteligencia artificial y los videojuegos, mostrando cómo la IA ha pasado de ser una simple herramienta para crear entornos o enemigos predecibles, a convertirse en el motor que crea, diseña e impulsa experiencias de juego mucho más inmersivas y dinamicas.
+Puntos Clave:
+
+IA y Comportamiento de los Personajes: Se analizaron las técnicas más avanzadas para dotar a los personajes no jugadores (NPC) de comportamientos más realistas y complejos. Desde el aprendizaje por refuerzo profundo que permite a los personajes adaptarse a las acciones del jugador, hasta la generación de diálogos contextualizados y emocionalmente inteligentes.
+
+Generación Procedimental de Contenidos: Se discutió cómo la IA está revolucionando la creación de mundos de juego, niveles y hasta historias completas. Algoritmos de aprendizaje automático pueden generar niveles únicos y desafiantes, mientras que las redes generativas adversarias (GAN) permiten crear assets artísticos como personajes, objetos y entornos de manera automatizada.
+IA y Jugabilidad: Se presentaron ejemplos de cómo la IA está mejorando la jugabilidad en diferentes géneros. Desde juegos de estrategia en tiempo real donde la IA toma decisiones tácticas en tiempo real, hasta juegos de rol donde la IA crea historias personalizadas basadas en las elecciones del jugador.
+
+El Futuro de la IA en los Videojuegos: Se vislumbró un futuro donde la IA será omnipresente en los videojuegos, permitiendo crear mundos virtuales cada vez más realistas y complejos, donde los jugadores podrán interactuar con personajes y entornos de una manera más natural y significativa.
