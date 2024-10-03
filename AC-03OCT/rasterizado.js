@@ -13,82 +13,117 @@ class Punto {
     }
 }
 
-// Definir los puntos de la figura
-const puntos = [
-    new Punto(50, 150),
-    new Punto(150, 50),
-    new Punto(250, 150),
-    new Punto(200, 250),
-    new Punto(100, 250)
-];
+// Función para generar puntos aleatorios dentro del canvas
+function generateRandomPoints(numPoints, width, height) {
+    const points = [];
+    for (let i = 0; i < numPoints; i++) {
+        const x = Math.random() * width;
+        const y = Math.random() * height;
+        points.push(new Punto(x, y));
+    }
+    return points;
+}
 
 // Calcular el centroide
-const centroid = puntos.reduce((acc, p) => {
-    return { x: acc.x + p.x, y: acc.y + p.y };
-}, { x: 0, y: 0 });
-centroid.x /= puntos.length;
-centroid.y /= puntos.length;
+function calculateCentroid(points) {
+    const centroid = points.reduce((acc, p) => {
+        return { x: acc.x + p.x, y: acc.y + p.y };
+    }, { x: 0, y: 0 });
+    centroid.x /= points.length;
+    centroid.y /= points.length;
+    return centroid;
+}
 
 // Función para calcular el ángulo desde el centroide
-function angleFromCentroid(punto) {
+function angleFromCentroid(punto, centroid) {
     return Math.atan2(punto.y - centroid.y, punto.x - centroid.x);
 }
 
-// Ordenar los puntos por el ángulo respecto al centroide
-const puntosOrdenados = puntos.slice().sort((a, b) => angleFromCentroid(a) - angleFromCentroid(b));
+// Ordenar los puntos en sentido horario
+function sortPointsClockwise(points) {
+    const centroid = calculateCentroid(points);
+    return points.slice().sort((a, b) => angleFromCentroid(b, centroid) - angleFromCentroid(a, centroid)); // Sentido horario
+}
+
+// Función para calcular el área del polígono (para verificar sentido horario)
+function polygonArea(points) {
+    let area = 0;
+    for (let i = 0; i < points.length; i++) {
+        const p1 = points[i];
+        const p2 = points[(i + 1) % points.length];
+        area += (p1.x * p2.y - p2.x * p1.y);
+    }
+    return area / 2;
+}
+
+// Función para verificar si la figura es convexa o cóncava
+function isConvex(points) {
+    const crossProducts = [];
+    const n = points.length;
+
+    for (let i = 0; i < n; i++) {
+        const o = points[i];
+        const a = points[(i + 1) % n];
+        const b = points[(i + 2) % n];
+        const cp = crossProduct(o, a, b);
+        crossProducts.push(cp);
+    }
+
+    return crossProducts.every(cp => cp > 0 || cp === 0);
+}
 
 // Función para calcular el producto cruzado
 function crossProduct(o, a, b) {
     return (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x);
 }
 
-// Verificar si la figura es convexa o cóncava
-const crossProducts = [];
-const n = puntosOrdenados.length;
-
-for (let i = 0; i < n; i++) {
-    const o = puntosOrdenados[i];
-    const a = puntosOrdenados[(i + 1) % n];
-    const b = puntosOrdenados[(i + 2) % n];
-    const cp = crossProduct(o, a, b);
-    crossProducts.push(cp);
+// Función para borrar el canvas
+function clearCanvas(canvasId) {
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-const isConvex = crossProducts.every(cp => cp > 0 || cp === 0);
-
-// Mostrar el resultado
-const resultText = isConvex ? "La figura es convexa" : "La figura es cóncava";
-document.getElementById("result").textContent = resultText;
-
-// Función para dibujar la figura en formato rasterizado (bitmap)
-function drawRasterizedFigure() {
-    const canvas = document.getElementById("rasterCanvas");
+// Función para dibujar la figura en el canvas (común para vectorizado y rasterizado)
+function drawFigure(canvasId, points, fill = false) {
+    const canvas = document.getElementById(canvasId);
     const ctx = canvas.getContext('2d');
-
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "lightgray";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     ctx.beginPath();
-    ctx.moveTo(puntosOrdenados[0].x, puntosOrdenados[0].y);
+    ctx.moveTo(points[0].x, points[0].y);
 
-    for (let i = 1; i < puntosOrdenados.length; i++) {
-        ctx.lineTo(puntosOrdenados[i].x, puntosOrdenados[i].y);
+    for (let i = 1; i < points.length; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
     }
 
     ctx.closePath();
-    ctx.fillStyle = "rgba(0, 128, 255, 0.3)";
-    ctx.fill();
+
+    if (fill) {
+        ctx.fillStyle = "rgba(0, 128, 255, 0.3)";
+        ctx.fill();
+    }
+
     ctx.stroke();
 }
 
-// Función para borrar el canvas
-function clearCanvas() {
-    const canvas = document.getElementById("rasterCanvas");
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-}
+// Evento del botón de "Dibujar"
+document.getElementById("dibujarBtn").addEventListener("click", () => {
+    const canvas = document.getElementById("rasterCanvas"); 
+    const width = canvas.width;
+    const height = canvas.height;
 
-// Asignar eventos a los botones
-document.getElementById("dibujarBtn").addEventListener("click", drawRasterizedFigure);
-document.getElementById("borrarBtn").addEventListener("click", clearCanvas);
+    const puntosAleatorios = generateRandomPoints(5, width, height); // Generar 5 puntos aleatorios
+    const puntosOrdenados = sortPointsClockwise(puntosAleatorios);  // Ordenar en sentido horario
+
+    drawFigure(canvas.id, puntosOrdenados, canvas.id === "rasterCanvas"); // Rellenar si es rasterizado
+
+    const resultText = isConvex(puntosOrdenados) ? "La figura es convexa" : "La figura es cóncava";
+    document.getElementById("result").textContent = resultText;
+});
+
+// Evento del botón de "Borrar"
+document.getElementById("borrarBtn").addEventListener("click", () => {
+    clearCanvas("vectorCanvas"); // O "rasterCanvas" según el archivo
+    document.getElementById("result").textContent = "";
+});
